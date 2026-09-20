@@ -6,80 +6,34 @@ import ScoreBoard from "@/components/scoreboard/ScoreBoard";
 import BotAction from "@/components/botAction/BotAction";
 import PlayerAction from "@/components/PlayerAction/PlayerAction";
 
-import { getScore, playGame } from "@/lib/api";
+import { playGame } from "@/lib/api";
 import { socket } from "@/lib/socket";
 
 import { Action, GameResult } from "@/lib/types";
 
 import styles from "./page.module.scss";
+import useScore from "@/hooks/useScore";
+import useGameplay from "@/hooks/ีuseGameplay";
 
 export default function Home() {
-  const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const { loadScore, score, highScore, setHighScore, setScore } = useScore();
+  const { handleAction, botAction, selectedAction, result, loading, error } =
+    useGameplay({ setHighScore, setScore });
 
-  const [botAction, setBotAction] = useState<Action | null>(null);
-  const [selectedAction, setSelectedAction] = useState<Action | null>(null);
-  const [result, setResult] = useState<GameResult | null>(null);
+  useEffect(() => {
+    loadScore();
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+    socket.connect();
 
-  // useEffect(() => {
-  //   loadScore();
+    socket.on("highScoreUpdated", (data) => {
+      setHighScore(data.highScore);
+    });
 
-  //   socket.connect();
-
-  //   socket.on('highScoreUpdated', (data) => {
-  //     setHighScore(data.highScore);
-  //   });
-
-  //   return () => {
-  //     socket.off('highScoreUpdated');
-  //     socket.disconnect();
-  //   };
-  // }, []);
-
-  // async function loadScore() {
-  //   try {
-  //     const data = await getScore();
-
-  //     setScore(data.score);
-  //     setHighScore(data.highScore);
-  //   } catch {
-  //     setError('Cannot load score');
-  //   }
-  // }
-
-  const handleAction = async (action: Action) => {
-    setSelectedAction(action);
-    // if (loading) {
-    //   return;
-    // }
-
-    // setLoading(true);
-    // setError('');
-    // setResult(null);
-
-    // try {
-    //   const data = await playGame(action);
-
-    //   setBotAction(data.botAction);
-    //   setResult(data.result);
-
-    //   setScore(data.score);
-    //   setHighScore(data.highScore);
-
-    //   // แสดงผล 2 วินาที
-    //   setTimeout(() => {
-    //     setBotAction(null);
-    //     setResult(null);
-    //   }, 2000);
-    // } catch {
-    //   setError('Cannot play game');
-    // } finally {
-    //   setLoading(false);
-    // }
-  }
+    return () => {
+      socket.off("highScoreUpdated");
+      socket.disconnect();
+    };
+  }, [loadScore, setHighScore]);
 
   return (
     <main className={styles.container}>
@@ -92,7 +46,11 @@ export default function Home() {
 
             <div className={styles.divider} />
 
-            <PlayerAction selectedAction={selectedAction} disabled={loading} onAction={handleAction} />
+            <PlayerAction
+              selectedAction={selectedAction}
+              disabled={loading}
+              onAction={handleAction}
+            />
 
             {loading && <p>Loading...</p>}
 
@@ -100,6 +58,38 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {(loading || result) && (
+        <div className={styles.overlay}>
+          <div className={styles.overlayContent}>
+            {loading ? (
+              <>
+                <div className={styles.spinner} />
+
+                <h2>Playing...</h2>
+
+                <p>Bot is choosing...</p>
+              </>
+            ) : (
+              <>
+                <div
+                  className={`${styles.resultIcon} ${
+                    styles[result!.toLowerCase()]
+                  }`}
+                >
+                  {result === "WIN" && "✓"}
+                  {result === "LOSE" && "✕"}
+                  {result === "DRAW" && "="}
+                </div>
+
+                <h2>{result}</h2>
+
+                <p>Bot chose {botAction}</p>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
