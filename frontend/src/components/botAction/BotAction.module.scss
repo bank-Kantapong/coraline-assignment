@@ -1,0 +1,24 @@
+.botActionContainer {
+  display: flex;
+  gap: 24px;
+}
+
+.resultBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  max-width: 300px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: transparent;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .botActionContainer {
+    flex-direction: column;
+    gap: 0px;
+  }
+}

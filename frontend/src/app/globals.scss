@@ -1,0 +1,28 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #5c5c5c;
+  --border-color: #cccccc;
+  --background-color: #f7f7f7;
+  --text-color: #222;
+  --white-color: #ffffff;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  color: #222;
+}
+
+button {
+  font-family: inherit;
+}

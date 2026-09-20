@@ -1,0 +1,45 @@
+.playerActionContainer {
+    display: flex;
+    gap: 24px;
+}
+
+.actionRow {
+  display: flex;
+  gap: 24px;
+}
+
+.actionBox {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  aspect-ratio: 3 / 2;
+  width: 100%;
+  max-width: 300px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background-color: transparent;
+  margin: 0 auto;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  &.selected {
+    border-color: var(--primary-color);
+  }
+}
+
+@media (max-width: 768px) {
+  .playerActionContainer {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .actionRow {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+  }
+}
