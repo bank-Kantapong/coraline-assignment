@@ -1,6 +1,7 @@
+import { useEffect, useRef, useState } from "react";
+
 import { playGame } from "@/lib/api";
 import { Action, GameResult } from "@/lib/types";
-import { useState } from "react";
 
 interface UseGameplayProps {
   setHighScore: (highScore: number) => void;
@@ -14,12 +15,22 @@ const useGameplay = ({ setHighScore, setScore }: UseGameplayProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
   const handleAction = async (action: Action) => {
-    setSelectedAction(action);
     if (loading) {
       return;
     }
 
+    setSelectedAction(action);
     setLoading(true);
     setError("");
     setResult(null);
@@ -33,13 +44,15 @@ const useGameplay = ({ setHighScore, setScore }: UseGameplayProps) => {
       setScore(data.score);
       setHighScore(data.highScore);
 
-      setTimeout(() => {
+      timeoutRef.current = setTimeout(() => {
         setBotAction(null);
         setResult(null);
         setSelectedAction(null);
       }, 2000);
-    } catch {
-      setError("Cannot play game");
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "An unknown error occurred",
+      );
     } finally {
       setLoading(false);
     }

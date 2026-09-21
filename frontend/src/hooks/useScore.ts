@@ -7,13 +7,16 @@ const useScore = () => {
   const [error, setError] = useState("");
 
   const loadScore = useCallback(async () => {
+    setError("");
+
     try {
       const data = await getScore();
+
       setScore(data.score);
       setHighScore(data.highScore);
-    } catch (error) {
+    } catch (err) {
       setError(
-        error instanceof Error ? error.message : "An unknown error occurred",
+        err instanceof Error ? err.message : "An unknown error occurred",
       );
     }
   }, []);

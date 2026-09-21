@@ -1,24 +1,34 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import ScoreBoard from "@/components/scoreboard/ScoreBoard";
 import BotAction from "@/components/botAction/BotAction";
 import PlayerAction from "@/components/PlayerAction/PlayerAction";
 
-import { playGame } from "@/lib/api";
 import { socket } from "@/lib/socket";
-
-import { Action, GameResult } from "@/lib/types";
 
 import styles from "./page.module.scss";
 import useScore from "@/hooks/useScore";
-import useGameplay from "@/hooks/ีuseGameplay";
+import useGameplay from "@/hooks/useGameplay";
 
 export default function Home() {
-  const { loadScore, score, highScore, setHighScore, setScore } = useScore();
-  const { handleAction, botAction, selectedAction, result, loading, error } =
-    useGameplay({ setHighScore, setScore });
+  const {
+    loadScore,
+    score,
+    highScore,
+    setHighScore,
+    setScore,
+    error: scoreError,
+  } = useScore();
+  const {
+    handleAction,
+    botAction,
+    selectedAction,
+    result,
+    loading,
+    error: gameplayError,
+  } = useGameplay({ setHighScore, setScore });
 
   useEffect(() => {
     loadScore();
@@ -42,54 +52,24 @@ export default function Home() {
         <div className={styles.gameBody}>
           <ScoreBoard score={score} highScore={highScore} />
           <div>
-            <BotAction action={botAction} />
+            <BotAction action={botAction} loading={loading} result={result} />
 
             <div className={styles.divider} />
 
             <PlayerAction
               selectedAction={selectedAction}
-              disabled={loading}
+              disabled={!!selectedAction || loading}
               onAction={handleAction}
             />
 
             {loading && <p>Loading...</p>}
 
-            {error && <p className={styles.error}>{error}</p>}
+            {scoreError && <p className={styles.error}>{scoreError}</p>}
+
+            {gameplayError && <p className={styles.error}>{gameplayError}</p>}
           </div>
         </div>
       </section>
-
-      {(loading || result) && (
-        <div className={styles.overlay}>
-          <div className={styles.overlayContent}>
-            {loading ? (
-              <>
-                <div className={styles.spinner} />
-
-                <h2>Playing...</h2>
-
-                <p>Bot is choosing...</p>
-              </>
-            ) : (
-              <>
-                <div
-                  className={`${styles.resultIcon} ${
-                    styles[result!.toLowerCase()]
-                  }`}
-                >
-                  {result === "WIN" && "✓"}
-                  {result === "LOSE" && "✕"}
-                  {result === "DRAW" && "="}
-                </div>
-
-                <h2>{result}</h2>
-
-                <p>Bot chose {botAction}</p>
-              </>
-            )}
-          </div>
-        </div>
-      )}
     </main>
   );
 }

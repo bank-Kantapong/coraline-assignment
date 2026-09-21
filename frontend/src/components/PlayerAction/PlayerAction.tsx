@@ -7,8 +7,8 @@ import { RockIcon } from "../../../public/RockIcon";
 import { ScissorsIcon } from "../../../public/ScissorsIcon";
 
 interface PlayerActionProps {
-  selectedAction: Action | null;
-  disabled: boolean;
+  selectedAction?: Action | null;
+  disabled?: boolean;
   onAction: (action: Action) => void;
 }
 
@@ -16,7 +16,7 @@ const actions: Action[] = ["ROCK", "PAPER", "SCISSORS"];
 
 const PlayerAction = ({
   selectedAction,
-  disabled,
+  disabled = false,
   onAction,
 }: PlayerActionProps) => {
   const actionIcon = (action: Action) => {
@@ -43,6 +43,7 @@ const PlayerAction = ({
         {actions.map((action) => (
           <button
             key={action}
+            name={action}
             type="button"
             disabled={disabled}
             className={`${styles.actionBox} ${selectedAction === action ? styles.selected : ""}`}

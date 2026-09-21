@@ -13,6 +13,7 @@ export interface GameResponse {
   result: GameResult;
   score: number;
   highScore: number;
+  highScoreUpdated: boolean;
 }
 
 export interface HighScoreUpdatedEvent {
