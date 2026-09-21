@@ -23,27 +23,19 @@
   }
 }
 
-/* =========================
-   Loading Spinner
-========================= */
-
 .spinner {
   width: 56px;
   height: 56px;
 
   margin: 0 auto;
 
-  border: 5px solid #e5e5e5;
+  border: 5px solid var(--border-color);
   border-top-color: #222;
 
   border-radius: 50%;
 
   animation: spin 0.8s linear infinite;
 }
-
-/* =========================
-   Result Icon
-========================= */
 
 .resultIcon {
   width: 80px;
@@ -61,30 +53,17 @@
   font-weight: bold;
 }
 
-/* WIN */
-
 .win {
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--win-bg-color);
 }
-
-/* LOSE */
 
 .lose {
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--lose-bg-color);
 }
-
-/* DRAW */
 
 .draw {
-  background: #fef3c7;
-  color: #d97706;
+  background: var(--draw-bg-color);
 }
-
-/* =========================
-   Animation
-========================= */
 
 @keyframes spin {
   from {
@@ -93,27 +72,5 @@
 
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.9);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }

@@ -29,16 +29,13 @@ const BotAction = ({ action, loading = false, result }: BotActionProps) => {
   return (
     <div className={styles.botActionContainer}>
       <p>Bot action:</p>
-
       <div className={styles.resultBox}>
         {action ? (
           <div>
             {loading ? (
               <>
                 <div className={styles.spinner} />
-
                 <h2>Playing...</h2>
-
                 <p>Bot is choosing...</p>
               </>
             ) : (
@@ -50,7 +47,6 @@ const BotAction = ({ action, loading = false, result }: BotActionProps) => {
                 >
                   {actionIcon(action)}
                 </div>
-
                 <h2>
                   {result === "DRAW"
                     ? "Draw!"
@@ -58,7 +54,6 @@ const BotAction = ({ action, loading = false, result }: BotActionProps) => {
                       ? "You win!"
                       : "You lose!"}
                 </h2>
-
                 <p>Bot chose: {action}</p>
               </>
             )}

@@ -13,7 +13,6 @@ const ScoreBoard = ({ score, highScore }: ScoreType) => {
           <span>turn</span>
         </div>
       </div>
-
       <div className={styles.scoreRow}>
         <span className={styles.label}>High Score:</span>
         <div className={styles.value}>

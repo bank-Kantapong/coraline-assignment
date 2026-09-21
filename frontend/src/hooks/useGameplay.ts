@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-
 import { playGame } from "@/lib/api";
 import { Action, GameResult } from "@/lib/types";
 

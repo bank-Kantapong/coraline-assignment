@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 import ScoreBoard from "@/components/scoreboard/ScoreBoard";
 import BotAction from "@/components/botAction/BotAction";
-import PlayerAction from "@/components/PlayerAction/PlayerAction";
+import PlayerAction from "@/components/playerAction/PlayerAction";
 
 import { socket } from "@/lib/socket";
 
@@ -57,23 +57,18 @@ export default function Home() {
           <ScoreBoard score={score} highScore={highScore} />
           <div>
             <BotAction action={botAction} loading={loading} result={result} />
-
             <div className={styles.divider} />
-
             <PlayerAction
               selectedAction={selectedAction}
               disabled={!!selectedAction || loading}
               onAction={handleAction}
             />
-
             {loading && <p>Loading...</p>}
-
             {scoreError && (
               <div className={styles.errorWrapper}>
                 <p className={styles.error}>{scoreError}</p>
               </div>
             )}
-
             {gameplayError && (
               <div className={styles.errorWrapper}>
                 <p className={styles.error}>{gameplayError}</p>
