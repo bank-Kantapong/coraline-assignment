@@ -24,25 +24,40 @@ app.use(express.json());
 
 app.use(cookieParser());
 
-// create a new player if the player_id cookie is not present
+// create a new player if the player_id cookie is not found
 app.use((req, res, next) => {
-  if (!req.cookies.player_id) {
-    const playerId = crypto.randomUUID();
+  let playerId = req.cookies.player_id;
 
-    db.prepare(
-      `
+  if (playerId) {
+    const player = db
+      .prepare(`
+        SELECT id
+        FROM players
+        WHERE id = ?
+      `)
+      .get(playerId);
+
+    if (!player) {
+      playerId = undefined;
+    }
+  }
+
+  if (!playerId) {
+    playerId = crypto.randomUUID();
+
+    db.prepare(`
       INSERT INTO players (
         id,
         score
       )
       VALUES (?, 0)
-    `,
-    ).run(playerId);
+    `).run(playerId);
 
-    res.cookie("player_id", playerId, {
+    res.cookie('player_id', playerId, {
       httpOnly: true,
-      sameSite: "lax",
+      sameSite: 'lax',
       secure: false,
+      path: '/',
       maxAge: 1000 * 60 * 60 * 24 * 365,
     });
 

@@ -33,14 +33,18 @@ export default function Home() {
   useEffect(() => {
     loadScore();
 
-    socket.connect();
+    if (!socket.connected) {
+      socket.connect();
+    }
 
-    socket.on("highScoreUpdated", (data) => {
+    const handleHighScoreUpdate = (data: { highScore: number }) => {
       setHighScore(data.highScore);
-    });
+    };
+
+    socket.on("highScoreUpdated", handleHighScoreUpdate);
 
     return () => {
-      socket.off("highScoreUpdated");
+      socket.off("highScoreUpdated", handleHighScoreUpdate);
       socket.disconnect();
     };
   }, [loadScore, setHighScore]);
@@ -64,9 +68,17 @@ export default function Home() {
 
             {loading && <p>Loading...</p>}
 
-            {scoreError && <p className={styles.error}>{scoreError}</p>}
+            {scoreError && (
+              <div className={styles.errorWrapper}>
+                <p className={styles.error}>{scoreError}</p>
+              </div>
+            )}
 
-            {gameplayError && <p className={styles.error}>{gameplayError}</p>}
+            {gameplayError && (
+              <div className={styles.errorWrapper}>
+                <p className={styles.error}>{gameplayError}</p>
+              </div>
+            )}
           </div>
         </div>
       </section>

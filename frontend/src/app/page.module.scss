@@ -21,6 +21,14 @@
   gap: 40px;
 }
 
+.errorWrapper {
+  background-color: rgb(255, 228, 228);
+  padding: 8px 16px;
+  width: 100%;
+  border-radius: 16px;
+  margin: 16px 0;
+}
+
 .error {
   margin-top: 20px;
   color: #d00;
