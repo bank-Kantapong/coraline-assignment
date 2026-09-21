@@ -132,6 +132,47 @@ The database is stored under:
 backend/data/
 ```
 
+## How to Play
+
+This is a two-player real-time game. Each player should open the game in a separate browser session.
+
+## 1. Open Player 1
+
+Open the game in your first browser:
+
+http://localhost:3000
+
+For example:
+```
+Chrome
+```
+
+## 2. Open Player 2
+
+Open the same URL using another browser or an Incognito/Private window.
+
+For example:
+
+```
+Chrome + Incognito
+Chrome + Edge
+Chrome + Firefox
+```
+
+Using a separate browser session ensures that each player has a separate session and player identity.
+
+## 3. Start the Game
+
+Once both players have joined:
+
+```
+- Start the game.
+- Each player makes their move.
+- The round result is displayed.
+- Scores are updated based on the game results.
+- The high score is saved to the backend when a new high score is achieved.
+- The high score is synchronized in real time between players.
+```
 
 ## Game Features
 
