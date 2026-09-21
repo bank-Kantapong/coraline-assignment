@@ -1,20 +1,34 @@
-import database from 'better-sqlite3';
+import Database from 'better-sqlite3';
 import path from 'path';
 import fs from 'fs';
 
-const dataDirectory = path.join(process.cwd(), 'database');
+const dataDirectory = path.join(
+  process.cwd(),
+  'data'
+);
 
-if(!fs.existsSync(dataDirectory)) {
-    fs.mkdirSync(dataDirectory, {
-        recursive: true
-    });
+if (!fs.existsSync(dataDirectory)) {
+  fs.mkdirSync(dataDirectory, {
+    recursive: true,
+  });
 }
 
-const dbPath = path.join(dataDirectory, 'database.db');
+const isTest =
+  process.env.NODE_ENV === 'test' ||
+  process.env.VITEST === 'true';
 
-export const db = new database(dbPath)
+const dbPath = isTest
+  ? ':memory:'
+  : path.join(
+      dataDirectory,
+      'game.db'
+    );
 
-db.pragma('journal_mode = WAL');
+export const db = new Database(dbPath);
+
+if (!isTest) {
+  db.pragma('journal_mode = WAL');
+}
 
 db.exec(`
   CREATE TABLE IF NOT EXISTS players (

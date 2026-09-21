@@ -3,7 +3,7 @@ import {
   gameplay,
   getPlayerScore,
   isValidAction,
-} from "../services/game.services";
+} from "../services/game.service";
 import { Server } from "socket.io";
 
 const router = Router();
